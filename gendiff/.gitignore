@@ -7,4 +7,4 @@ dist/
 coverage.xml
 .pytest_cache/
 setup.py
-TEST2/
+.TEST2
