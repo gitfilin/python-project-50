@@ -21,3 +21,6 @@ gendiff = "gendiff.scripts.gendiff:main"
 [build-system]
 build-backend = "poetry.core.masonry.api"
 requires = ["poetry-core"]
+
+[tool.pytest.ini_options]
+addopts = "--cov=gendiff --cov-report=term-missing"
