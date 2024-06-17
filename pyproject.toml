@@ -1,5 +1,5 @@
 [tool.poetry]
-authors = ["gitfilin <vy.filin2018@gmail.com>"]
+authors = ["gitfilin <vy.filin@yandex.ru>"]
 description = ""
 name = "hexlet-code"
 packages = [
