@@ -1,37 +1,27 @@
-from gendiff.diff_generator import generate_diff
-from gendiff.parser import parser_checks_file_type
+import pytest
+from gendiff.scripts.gendiff import generate_diff
+from tests import get_path
 
 
-def test_generate_diff_flat():
-    file1 = 'tests/fixtures/file1.json'
-    file2 = 'tests/fixtures/file2.json'
+@pytest.mark.parametrize(
+    "file1, file2, formatter, expected",
+    [
+        ("file1.json", "file2.json", "stylish", "expected_result_simple.txt"),
+        ("file3.json", "file4.json", "stylish", "expected_result_stylish.txt"),
+        ("file3.json", "file4.json", "plain", "expected_result_plain.txt"),
+        ("file3.json", "file4.json", "json", "expected_result.json"),
+        ("file1.yml", "file2.yml", "stylish", "expected_result_stylish.txt"),
+        ("file1.yml", "file2.yml", "plain", "expected_result_plain.txt"),
+        ("file1.yml", "file4.json", "stylish", "expected_result_stylish.txt"),
+        ("file1.yml", "file4.json", "plain", "expected_result_plain.txt"),
+    ]
+)
+def test_generate_diff(file1, file2, formatter, expected):
+    test_path1 = get_path(file1)
+    test_path2 = get_path(file2)
+    expected_path = get_path(expected)
 
-    data1 = parser_checks_file_type(file1)
-    data2 = parser_checks_file_type(file2)
-    expected_output = """{
-  - follow: False
-    host: hexlet.io
-  - proxy: 123.234.53.22
-  - timeout: 50
-  + timeout: 20
-  + verbose: True
-}"""
-    assert generate_diff(data1, data2) == expected_output
+    with open(expected_path, 'r') as file:
+        expected_result = file.read().strip()
 
-
-def test_flat_yaml_files():
-    file1 = 'tests/fixtures/file1.yaml'
-    file2 = 'tests/fixtures/file2.yaml'
-
-    data1 = parser_checks_file_type(file1)
-    data2 = parser_checks_file_type(file2)
-
-    expected_output = """{
-  - follow: False
-    host: hexlet.io
-  - proxy: 123.234.53.22
-  - timeout: 50
-  + timeout: 20
-  + verbose: True
-}"""
-    assert generate_diff(data1, data2) == expected_output
+    assert generate_diff(test_path1, test_path2, formatter) == expected_result

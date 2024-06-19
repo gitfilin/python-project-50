@@ -2,4 +2,5 @@ import os
 
 
 def get_path(file):
-    return os.path.join('tests', 'fixtures', file)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(current_dir, 'fixtures', file)
