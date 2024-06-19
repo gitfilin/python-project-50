@@ -19,17 +19,20 @@
 
 **Сравнение двух плоских файлов.**
 
-
----видео
+[![asciicast](https://asciinema.org/a/BuYJq754tKng5eeIjxqLOaUqa.svg)](https://asciinema.org/a/BuYJq754tKng5eeIjxqLOaUqa)
 
 **Сравнение двух файлов c рекурсивной структурой.**
 
----видео
+[![asciicast](https://asciinema.org/a/aF5afSAeGtSZXQVn5IcqbcelP.svg)](https://asciinema.org/a/aF5afSAeGtSZXQVn5IcqbcelP)
 
 **Сравнение двух файлов, вывод результат в формате JSON.**
 
----видео
+[![asciicast](https://asciinema.org/a/OHmjTKffu3oqcPOC5bjvtI271.svg)](https://asciinema.org/a/OHmjTKffu3oqcPOC5bjvtI271)
 
 **Сравнение двух файлов, вывод результат в формате plain.**
 
----видео
+[![asciicast](https://asciinema.org/a/icjq5EifjtpQEmGVX5eepw6dh.svg)](https://asciinema.org/a/icjq5EifjtpQEmGVX5eepw6dh)
+
+**Сравнение двух файлов JSON и YML**
+
+[![asciicast](https://asciinema.org/a/EHQFmLUctqpuj2UyE0hldwj3v.svg)](https://asciinema.org/a/EHQFmLUctqpuj2UyE0hldwj3v)
