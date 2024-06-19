@@ -1,8 +1,8 @@
 name: Python CI
 
 on:
-  - push
-  - pull_request
+- push
+- pull_request
 
 jobs:
   build:
@@ -12,24 +12,24 @@ jobs:
         # we want to test our package on several versions of Python
         python-version: [3.8, 3.9]
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
         # make depends on poetry
-      - name: Install dependencies
-        run: |
-          pip install poetry
-          make install
-      - name: Run linter and pytest
-        run: |
-          make check
-      - name: Test & publish code coverage
-        uses: paambaati/codeclimate-action@v5.0.0
-        if: github.ref_name == 'main'
-        env:
-          CC_TEST_REPORTER_ID: ffb3d627889525543230505b6db4575d721c485f5ab082571ebf72439ff1f507
-        with:
-          coverageCommand: make test-coverage
-          debug: true
+    - name: Install dependencies
+      run: |
+        pip install poetry
+        make install
+    - name: Run linter and pytest
+      run: |
+        make check
+    - name: Test & publish code coverage
+      uses: paambaati/codeclimate-action@v5.0.0
+      if: github.ref_name == 'main'
+      env:
+        CC_TEST_REPORTER_ID: 9de4d988d58288cbe341050dfb216204672882382888c0a1edfbec9f103d8a7d
+      with:
+        coverageCommand: make test-coverage
+        debug: true
