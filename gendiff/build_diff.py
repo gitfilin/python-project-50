@@ -1,4 +1,4 @@
-def build_diff(dict1, dict2):
+def generate_diff(dict1, dict2):
     differences = {}
     all_keys = sorted(set(dict1.keys()).union(set(dict2.keys())))
 
@@ -7,7 +7,7 @@ def build_diff(dict1, dict2):
         value2 = dict2.get(key)
 
         if isinstance(value1, dict) and isinstance(value2, dict):
-            diff = build_diff(value1, value2)
+            diff = generate_diff(value1, value2)
             if diff:
                 differences[key] = {'status': 'children', 'diff': diff}
         else:

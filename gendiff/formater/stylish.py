@@ -79,8 +79,7 @@ def format_dict(value, depth):
                          )
         else:
             lines.append(f'{base_indent}{DEF}{k}: '
-                         f'{
-                         format_value(v, depth + 1)}'
+                         f'{format_value(v, depth + 1)}'
                          )
     return '{\n' + '\n'.join(lines) + '\n' + DEF * (depth - 1) + '}'
 

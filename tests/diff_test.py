@@ -2,7 +2,7 @@ import os
 import json
 import yaml
 import pytest
-from gendiff.generate_diff import build_diff
+from gendiff.build_diff import generate_diff 
 from gendiff.formater.stylish import format as stylish_format
 from gendiff.formater.json_formatter import format as json_format
 from gendiff.formater.plain import format as plain_format
@@ -123,7 +123,7 @@ def test_stylish_format(file1_key, file2_key, expected_output, data_files):
         file1 = load_yaml(file1_path)
         file2 = load_yaml(file2_path)
 
-    differences = build_diff(file1, file2)
+    differences = generate_diff (file1, file2)
     formatted_diff = stylish_format(differences)
     assert formatted_diff == expected_output
 
@@ -405,7 +405,7 @@ def test_json_format(file1_key, file2_key, expected_output, data_files):
         file1 = load_yaml(file1_path)
         file2 = load_yaml(file2_path)
 
-    differences = build_diff(file1, file2)
+    differences = generate_diff (file1, file2)
     formatted_diff = json_format(differences)
     assert formatted_diff == expected_output
 
@@ -459,7 +459,7 @@ def test_plain_format(file1_key, file2_key, expected_output, data_files):
         file1 = load_yaml(file1_path)
         file2 = load_yaml(file2_path)
 
-    differences = build_diff(file1, file2)
+    differences = generate_diff (file1, file2)
     formatted_diff = plain_format(differences)
     assert formatted_diff == expected_output
 
