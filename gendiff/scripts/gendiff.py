@@ -1,6 +1,6 @@
 from gendiff.cli import parse_arguments
 from gendiff.parser import parser_checks_path
-from gendiff.diff_generator import build_diff
+from gendiff.generate_diff import build_diff
 from gendiff.formater import get_formatter
 
 

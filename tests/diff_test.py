@@ -2,7 +2,7 @@ import os
 import json
 import yaml
 import pytest
-from gendiff.diff_generator import build_diff
+from gendiff.generate_diff import build_diff
 from gendiff.formater.stylish import format as stylish_format
 from gendiff.formater.json_formatter import format as json_format
 from gendiff.formater.plain import format as plain_format
