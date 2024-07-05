@@ -22,12 +22,14 @@ def format(diff: dict, path="") -> str:
             nested_lines = format(value['diff'], f"{property_path}.")
             lines.append(nested_lines)
         elif value['status'] == 'added':
-            lines.append(f"Property '{property_path}' was added with value: {
-                         to_str(value['value'])}")
+            lines.append(f"Property '{property_path}' was added with value: "
+                         f"{to_str(value['value'])}"
+                         )
         elif value['status'] == 'removed':
             lines.append(f"Property '{property_path}' was removed")
         elif value['status'] == 'changed':
-            lines.append(f"Property '{property_path}' was updated. From {
-                         to_str(value['old'])} to {to_str(value['new'])}")
+            lines.append(f"Property '{property_path}' was updated. From "
+                         f"{to_str(value['old'])} to {to_str(value['new'])}"
+                         )
 
     return '\n'.join(lines)
