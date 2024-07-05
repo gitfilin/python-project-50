@@ -30,11 +30,15 @@ def format_line(key, value, depth):
     if status == 'unchanged':
         return f'{base_indent}{format_key_value(key, value["value"])}'
     elif status == 'added':
-        return f'{base_indent[:-4]}  {ADD}{key}: {
-            format_value(value["value"], depth)}'
+        return (
+            f'{base_indent[:-4]}  {ADD}{key}: '
+            f'{format_value(value["value"], depth)}'
+        )
     elif status == 'removed':
-        return f'{base_indent[:-4]}  {DEL}{key}: {
-            format_value(value["value"], depth)}'
+        return (
+            f'{base_indent[:-4]}  {DEL}{key}: '
+            f'{format_value(value["value"], depth)}'
+        )
     elif status == 'changed':
         return format_changed(key, value, depth)
 
@@ -43,9 +47,13 @@ def format_changed(key, value, depth):
     base_indent = DEF * depth
     lines = []
     lines.append(
-        f'{base_indent[:-4]}  {DEL}{key}: {format_value(value["old"], depth)}')
+        f'{base_indent[:-4]}  {DEL}{key}: '
+        f'{format_value(value["old"], depth)}'
+    )
     lines.append(
-        f'{base_indent[:-4]}  {ADD}{key}: {format_value(value["new"], depth)}')
+        f'{base_indent[:-4]}  {ADD}{key}: '
+        f'{format_value(value["new"], depth)}'
+    )
     return '\n'.join(lines)
 
 
@@ -66,10 +74,14 @@ def format_dict(value, depth):
     base_indent = DEF * depth
     for k, v in value.items():
         if isinstance(v, dict):
-            lines.append(f'{base_indent}{DEF}{k}: {format_dict(v, depth + 1)}')
+            lines.append(f'{base_indent}{DEF}{k}: '
+                         f'{format_dict(v, depth + 1)}'
+                         )
         else:
-            lines.append(f'{base_indent}{DEF}{k}: {
-                         format_value(v, depth + 1)}')
+            lines.append(f'{base_indent}{DEF}{k}: '
+                         f'{
+                         format_value(v, depth + 1)}'
+                         )
     return '{\n' + '\n'.join(lines) + '\n' + DEF * (depth - 1) + '}'
 
 
