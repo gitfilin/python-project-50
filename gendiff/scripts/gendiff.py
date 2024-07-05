@@ -1,14 +1,5 @@
 from gendiff.cli import parse_arguments
-from gendiff.parser import parser_checks_path
-from gendiff.build_diff import generate_diff as generate_diff_files
-from gendiff.formater import get_formatter
-
-
-def generate_diff(file_path1, file_path2, format_name='stylish'):
-    data1, data2 = parser_checks_path(file_path1, file_path2)
-    diff = generate_diff_files(data1, data2)
-    formatter = get_formatter(format_name)
-    return formatter(diff)
+from gendiff import generate_diff
 
 
 def main():
