@@ -1,7 +1,7 @@
 from typing import Any, Union
 
 
-def to_str(value: Any) -> [Union[str, int]]:
+def to_str(value: Any) -> Union[str, int]:
     if isinstance(value, dict):
         return "[complex value]"
     if isinstance(value, bool):
@@ -13,29 +13,21 @@ def to_str(value: Any) -> [Union[str, int]]:
     return f"'{value}'"
 
 
-def build_plain_iter(diff: dict, path="") -> str:
-    lines = list()
-    for dictionary in diff:
-        property = f"{path}{dictionary['key']}"
+def format(diff: dict, path="") -> str:
+    lines = []
+    for key, value in diff.items():
+        property_path = f"{path}{key}"
 
-        if dictionary['operation'] == 'add':
-            lines.append(f"Property '{property}' "
-                         f"was added with value: "
-                         f"{to_str(dictionary['new'])}")
+        if value['status'] == 'children':
+            nested_lines = format(value['diff'], f"{property_path}.")
+            lines.append(nested_lines)
+        elif value['status'] == 'added':
+            lines.append(f"Property '{property_path}' was added with value: {
+                         to_str(value['value'])}")
+        elif value['status'] == 'removed':
+            lines.append(f"Property '{property_path}' was removed")
+        elif value['status'] == 'changed':
+            lines.append(f"Property '{property_path}' was updated. From {
+                         to_str(value['old'])} to {to_str(value['new'])}")
 
-        if dictionary['operation'] == 'removed':
-            lines.append(f"Property '{property}' was removed")
-
-        if dictionary['operation'] == 'nested':
-            new_value = build_plain_iter(dictionary['value'], f"{property}.")
-            lines.append(f"{new_value}")
-
-        if dictionary['operation'] == 'changed':
-            lines.append(f"Property '{property}' was updated. "
-                         f"From {to_str(dictionary['old'])} to "
-                         f"{to_str(dictionary['new'])}")
     return '\n'.join(lines)
-
-
-def format(diff: dict) -> str:
-    return build_plain_iter(diff)

@@ -19,12 +19,13 @@ def parse_arguments():
                         version='gendiff 1.0',
                         help='output the version number')
 
-    # Удаление описания выбора формата вывода из справки
-    parser._optionals.title = 'Options:'
-
     args = parser.parse_args()
     return args
 
 
 if __name__ == '__main__':
-    print(parse_arguments())
+    import sys
+    sys.argv = ['gendiff/cli.py', 'tests/fixtures/file1.json',
+                'tests/fixtures/file2.json', '-f', 'stylish']
+    args = parse_arguments()
+    print(args)

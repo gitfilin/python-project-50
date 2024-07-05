@@ -1,50 +1,28 @@
-def build_diff(parced_data1: dict, parced_data2: dict):
-    diff = []
-    sorted_keys = sorted(
-        set(parced_data1.keys()).union(set(parced_data2.keys())))
+def build_diff(dict1, dict2):
+    differences = {}
+    all_keys = sorted(set(dict1.keys()).union(set(dict2.keys())))
 
-    operations = {
-        'add': handle_addition,
-        'remove': handle_removal,
-        'nested': handle_nested,
-        'same': handle_same,
-        'changed': handle_changed
-    }
+    for key in all_keys:
+        value1 = dict1.get(key)
+        value2 = dict2.get(key)
 
-    for key in sorted_keys:
-        if key not in parced_data1:
-            diff.append(operations['add'](key, parced_data2[key]))
-        elif key not in parced_data2:
-            diff.append(operations['remove'](key, parced_data1[key]))
-        elif isinstance(parced_data1[key], dict) and \
-                isinstance(parced_data2[key], dict):
-            child = build_diff(parced_data1[key], parced_data2[key])
-            diff.append(operations['nested'](key, child))
-        elif parced_data1[key] == parced_data2[key]:
-            diff.append(operations['same'](key, parced_data1[key]))
+        if isinstance(value1, dict) and isinstance(value2, dict):
+            diff = build_diff(value1, value2)
+            if diff:
+                differences[key] = {'status': 'children', 'diff': diff}
         else:
-            diff.append(operations['changed'](
-                key, parced_data1[key], parced_data2[key]))
-
-    return diff
-
-
-def handle_addition(key, value):
-    return {'key': key, 'operation': 'add', 'new': value}
+            diff_status = compare_values(value1, value2)
+            if diff_status:
+                differences[key] = diff_status
+    return differences
 
 
-def handle_removal(key, value):
-    return {'key': key, 'operation': 'removed', 'old': value}
-
-
-def handle_nested(key, value):
-    return {'key': key, 'operation': 'nested', 'value': value}
-
-
-def handle_same(key, value):
-    return {'key': key, 'operation': 'same', 'value': value}
-
-
-def handle_changed(key, old_value, new_value):
-    return {'key': key, 'operation': 'changed',
-            'old': old_value, 'new': new_value}
+def compare_values(value1, value2):
+    if value1 == value2:
+        return {'status': 'unchanged', 'value': value1}
+    elif value1 is None:
+        return {'status': 'added', 'value': value2}
+    elif value2 is None:
+        return {'status': 'removed', 'value': value1}
+    else:
+        return {'status': 'changed', 'old': value1, 'new': value2}
