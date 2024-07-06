@@ -52,17 +52,17 @@ def format_changed(key, value, depth):
 
     if old_value is None and new_value is True:
         lines.append(
-            f'{base_indent}{
-                DEF[:-2]}{ADD}{key}: {format_value(new_value, depth)}'
+            f'{base_indent}{DEF[:-2]}{ADD}{key}: '
+            f'{format_value(new_value, depth)}'
         )
     else:
         lines.append(
-            f'{base_indent}{
-                DEF[:-2]}{DEL}{key}: {format_value(old_value, depth)}'
+            f'{base_indent}{DEF[:-2]}{DEL}{key}: '
+            f'{format_value(old_value, depth)}'
         )
         lines.append(
-            f'{base_indent}{
-                DEF[:-2]}{ADD}{key}: {format_value(new_value, depth)}'
+            f'{base_indent}{DEF[:-2]}{ADD}{key}: '
+            f'{format_value(new_value, depth)}'
         )
 
     return '\n'.join(lines)
