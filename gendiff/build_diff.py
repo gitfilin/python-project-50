@@ -21,8 +21,14 @@ def compare_values(value1, value2):
     if value1 == value2:
         return {'status': 'unchanged', 'value': value1}
     elif value1 is None:
-        return {'status': 'added', 'value': value2}
+        if value2 is True:
+            return {'status': 'changed', 'old': None, 'new': value2}
+        else:
+            return {'status': 'added', 'value': value2}
     elif value2 is None:
-        return {'status': 'removed', 'value': value1}
+        if value1 is True:
+            return {'status': 'changed', 'old': value1, 'new': None}
+        else:
+            return {'status': 'removed', 'value': value1}
     else:
         return {'status': 'changed', 'old': value1, 'new': value2}
