@@ -206,7 +206,7 @@ def test_plain_format_rec(file1_key, file2_key, expected_key, data_files):
     ('yml1_rec', 'yml2_rec', 'result_json_rec'),
     ('yml1_rec', 'json2_rec', 'result_json_rec'),
 ])
-def test_plain_format_rec(file1_key, file2_key, expected_key, data_files):
+def test_json_format_rec(file1_key, file2_key, expected_key, data_files):
     file1_path = data_files[file1_key]
     file2_path = data_files[file2_key]
     expected_output_path = data_files[expected_key]
