@@ -463,5 +463,6 @@ def test_plain_format(file1_key, file2_key, expected_output, data_files):
     formatted_diff = plain_format(differences)
     assert formatted_diff == expected_output
 
+
 if __name__ == "__main__":
     pytest.main()
