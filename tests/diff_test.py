@@ -2,7 +2,7 @@ import os
 import json
 import yaml
 import pytest
-from gendiff.build_diff import generate_diff 
+from gendiff.build_diff import generate_diff
 from gendiff.formater.stylish import format as stylish_format
 from gendiff.formater.json_formatter import format as json_format
 from gendiff.formater.plain import format as plain_format
@@ -123,7 +123,7 @@ def test_stylish_format(file1_key, file2_key, expected_output, data_files):
         file1 = load_yaml(file1_path)
         file2 = load_yaml(file2_path)
 
-    differences = generate_diff (file1, file2)
+    differences = generate_diff(file1, file2)
     formatted_diff = stylish_format(differences)
     assert formatted_diff == expected_output
 
@@ -405,7 +405,7 @@ def test_json_format(file1_key, file2_key, expected_output, data_files):
         file1 = load_yaml(file1_path)
         file2 = load_yaml(file2_path)
 
-    differences = generate_diff (file1, file2)
+    differences = generate_diff(file1, file2)
     formatted_diff = json_format(differences)
     assert formatted_diff == expected_output
 
@@ -459,9 +459,79 @@ def test_plain_format(file1_key, file2_key, expected_output, data_files):
         file1 = load_yaml(file1_path)
         file2 = load_yaml(file2_path)
 
-    differences = generate_diff (file1, file2)
+    differences = generate_diff(file1, file2)
     formatted_diff = plain_format(differences)
     assert formatted_diff == expected_output
+
+
+def test_generate_diff():
+    file_path1 = '/home/vyfilin/python-project-50/tests/fixtures/rec_struct1.json'
+    file_path2 = '/home/vyfilin/python-project-50/tests/fixtures/rec_struct2.json'
+    result_stylish = (
+        '{\n'
+        '    common: {\n'
+        '      + follow: false\n'
+        '        setting1: Value 1\n'
+        '      - setting2: 200\n'
+        '      - setting3: true\n'
+        '      + setting3: {\n'
+        '                key: value\n'
+        '        }\n'
+        '      + setting4: blah blah\n'
+        '      + setting5: {\n'
+        '                key5: value5\n'
+        '        }\n'
+        '        setting6: {\n'
+        '            doge: {\n'
+        '              - wow: too much\n'
+        '              + wow: so much\n'
+        '            }\n'
+        '            key: value\n'
+        '          + ops: vops\n'
+        '        }\n'
+        '    }\n'
+        '    group1: {\n'
+        '      - baz: bas\n'
+        '      + baz: bars\n'
+        '        foo: bar\n'
+        '      - nest: {\n'
+        '                key: value\n'
+        '        }\n'
+        '      + nest: str\n'
+        '    }\n'
+        '  - group2: {\n'
+        '            abc: 12345\n'
+        '            deep: {\n'
+        '                id: 45\n'
+        '        }\n'
+        '    }\n'
+        '  + group3: {\n'
+        '            deep: {\n'
+        '                id: {\n'
+        '                    number: 45\n'
+        '            }\n'
+        '        }\n'
+        '            fee: 100500\n'
+        '    }\n'
+        '    group4: {\n'
+        '      + default: \n'
+        '      - foo: 0\n'
+        '      - isNested: false\n'
+        '      + isNested: none\n'
+        '      + key: false\n'
+        '        nest: {\n'
+        '          - bar: \n'
+        '          + bar: 0\n'
+        '          - isNested: true\n'
+        '        }\n'
+        '      + someKey: true\n'
+        '      - type: bas\n'
+        '      + type: bar\n'
+        '    }\n'
+        '}'
+    )
+
+    assert generate_diff(file_path1, file_path2) == result_stylish
 
 
 if __name__ == "__main__":
