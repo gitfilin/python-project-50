@@ -25,9 +25,9 @@ def format(diff, path=""):
         elif value['status'] == 'removed':
             lines.append(f"Property '{property_path}' was removed")
         elif value['status'] == 'changed':
-            lines.append(f"Property '{property_path}' was updated. From "
-                         f"{format_value(value['old'])} to {
-                format_value(value['new'])}"
+            lines.append(
+                f"Property '{property_path}' was updated. From "
+                f"{format_value(value['old'])} to {format_value(value['new'])}"
             )
 
     return '\n'.join(lines)
