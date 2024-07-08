@@ -1,6 +1,6 @@
 import os
 import pytest
-from gendiff.scripts.gendiff import generate_diff
+from gendiff.diff_generator import generate_diff
 
 
 # Получаем абсолютный путь к текущему файлу
