@@ -21,11 +21,3 @@ def parse_arguments():
 
     args = parser.parse_args()
     return args
-
-
-if __name__ == '__main__':
-    import sys
-    sys.argv = ['gendiff/cli.py', 'tests/fixtures/file1.json',
-                'tests/fixtures/file2.json', '-f', 'stylish']
-    args = parse_arguments()
-    print(args)

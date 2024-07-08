@@ -1,7 +1,4 @@
-from typing import Any, Union
-
-
-def to_str(value: Any) -> Union[str, int]:
+def format_value(value):
     if isinstance(value, dict):
         return "[complex value]"
     if isinstance(value, bool):
@@ -13,7 +10,7 @@ def to_str(value: Any) -> Union[str, int]:
     return f"'{value}'"
 
 
-def format(diff: dict, path="") -> str:
+def format(diff, path=""):
     lines = []
     for key, value in diff.items():
         property_path = f"{path}{key}"
@@ -23,13 +20,14 @@ def format(diff: dict, path="") -> str:
             lines.append(nested_lines)
         elif value['status'] == 'added':
             lines.append(f"Property '{property_path}' was added with value: "
-                         f"{to_str(value['value'])}"
+                         f"{format_value(value['value'])}"
                          )
         elif value['status'] == 'removed':
             lines.append(f"Property '{property_path}' was removed")
         elif value['status'] == 'changed':
             lines.append(f"Property '{property_path}' was updated. From "
-                         f"{to_str(value['old'])} to {to_str(value['new'])}"
-                         )
+                         f"{format_value(value['old'])} to {
+                format_value(value['new'])}"
+            )
 
     return '\n'.join(lines)

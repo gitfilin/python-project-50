@@ -3,6 +3,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/203e51504518dfc98349/maintainability)](https://codeclimate.com/github/gitfilin/python-project-50/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/203e51504518dfc98349/test_coverage)](https://codeclimate.com/github/gitfilin/python-project-50/test_coverage)
 
+
 # DESCRIPTION:
 
 **Вычислитель отличий**
