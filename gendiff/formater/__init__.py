@@ -4,8 +4,12 @@ from gendiff.formater.json_formatter import format as json
 
 
 def get_formatter(format_name):
+    # Форматирование в зависимости от типа
     if format_name == 'plain':
         return plain
     elif format_name == 'json':
         return json
-    return stylish
+    elif format_name == 'stylish':
+        return stylish
+    else:
+        raise ValueError(f"Неподдерживаемый формат: {format_name}")

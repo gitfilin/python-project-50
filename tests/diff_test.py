@@ -3,25 +3,16 @@ import pytest
 from gendiff.diff_generator import generate_diff
 
 
-# Получаем абсолютный путь к текущему файлу
-current_dir = os.path.abspath(__file__)
-
-# Получаем абсолютный путь к папке fixtures от текущего файла
-fixtures_dir = os.path.join(os.path.dirname(current_dir), 'fixtures')
-
-# Функция для загрузки текстовых файлов
-
-
-def load_text(file_path):
+def get_content(file_path):
     with open(file_path, 'r') as file:
         return file.read().strip()
 
-# Создание фикстуры для хранения путей к файлам
+# Создание фикстуры для хранения имен файлов
 
 
 @pytest.fixture
 def data_files():
-    files = {
+    return {
         'json1_flat': 'file1.json',
         'json2_flat': 'file2.json',
         'yml1_flat': 'file1.yml',
@@ -40,10 +31,6 @@ def data_files():
         'result_json_flat': 'result_json_flat.txt',
     }
 
-    # пути к файлам
-    for key in files:
-        files[key] = os.path.join(fixtures_dir, files[key])
-    return files
 
 # Тест для generate_diff
 
@@ -71,14 +58,15 @@ def data_files():
 ])
 def test_generate_diff(file1_key, file2_key, expected_key, format_name,
                        data_files):
-    file1_path = data_files[file1_key]
-    file2_path = data_files[file2_key]
-    expected_output_path = data_files[expected_key]
+    # Получаем абсолютный путь к текущему файлу
+    current_dir = os.path.abspath(__file__)
+    # Получаем абсолютный путь к папке fixtures от текущего файла
+    fixtures_dir = os.path.join(os.path.dirname(current_dir), 'fixtures')
+
+    file1_path = os.path.join(fixtures_dir, data_files[file1_key])
+    file2_path = os.path.join(fixtures_dir, data_files[file2_key])
+    expected_output_path = os.path.join(fixtures_dir, data_files[expected_key])
 
     differences = generate_diff(file1_path, file2_path, format_name=format_name)
-    expected_output = load_text(expected_output_path)
+    expected_output = get_content(expected_output_path)
     assert differences == expected_output
-
-
-if __name__ == "__main__":
-    pytest.main()

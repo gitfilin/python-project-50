@@ -1,31 +1,30 @@
-import os
-import json
 import yaml
+import json
 import sys
 
 
-def checks_extension_type(file_path: str) -> str:
-    """Получает расширение файла."""
-    _, ext = os.path.splitext(file_path)
-    return ext.lower()
+def parse_content(file, ext: str) -> dict:
+    # Парсит содержимое файла в зависимости от его типа
+    if ext in ['.yaml', '.yml']:
+        return yaml.safe_load(file)
+    elif ext == '.json':
+        return json.load(file)
+    else:
+        raise ValueError(f"Неподдерживаемый формат файла: {ext}")
 
 
-def load_file(file_path: str) -> dict:
-    """Загружает содержимое файла в зависимости от его типа"""
-    ext = checks_extension_type(file_path)
+def get_content(file_path: str) -> dict:
+    # Загружает содержимое файла в зависимости от его типа
+    ext = file_path[file_path.rfind('.'):]
     with open(file_path, 'r', encoding='utf-8') as file:
-        if ext in ['.yaml', '.yml']:
-            return yaml.safe_load(file)
-        elif ext == '.json':
-            return json.load(file)
-        else:
-            raise ValueError(f"Неподдерживаемый формат файла: {ext}")
+        return parse_content(file, ext)
 
 
-def parser_checks_path(file1: str, file2: str) -> tuple:
+def parser_checks_path(file1_path: str, file2_path: str) -> tuple:
+    # Загружает файлы по указанному пути в _path
     try:
-        data1 = load_file(file1)
-        data2 = load_file(file2)
+        data1 = get_content(file1_path)
+        data2 = get_content(file2_path)
         return data1, data2
 
     except FileNotFoundError:
