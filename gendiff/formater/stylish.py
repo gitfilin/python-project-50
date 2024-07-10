@@ -13,45 +13,31 @@ def format(diff):
 def make_lines(differences, depth=1):
     # Эта функция создает отформатированные строки для каждой пары ключ-значение
     lines = []
+    base_indent = INDENTATION * (depth - 1)
+
     for key, value in differences.items():
         status = value['status']
-        base_indent = INDENTATION * (depth - 1)
-        # провереям вложженый dict
+
         if status == 'children':
             lines.append(f'{base_indent}{INDENTATION}{key}: {{')
             nested_lines = make_lines(value['diff'], depth + 1)
             lines.extend(nested_lines)
             lines.append(f'{base_indent}{INDENTATION}}}')
+        elif status == 'unchanged':
+            lines.append(
+                f'{base_indent}{INDENTATION}{key}: '
+                f'{format_value(value["value"], depth)}'
+            )
+        elif status == 'changed':
+            lines.append(format_changed(key, value, depth))
         else:
-            lines.append(format_line(key, value, depth))
+            marker = ADDED_MARKER if status == 'added' else REMOVED_MARKER
+            lines.append(
+                f'{base_indent}{INDENTATION[:-2]}{marker}{key}: '
+                f'{format_value(value["value"], depth)}'
+            )
+
     return lines
-
-
-def format_line(key, value, depth):
-    """
-    Эта функция форматирует строку для пары ключ-значение в зависимости
-    от статуса значения (status)
-
-    """
-    base_indent = INDENTATION * (depth - 1)
-    status = value['status']
-    if status == 'unchanged':
-        return (
-            f'{base_indent}{INDENTATION}{key}: '
-            f'{format_value(value["value"], depth)}'
-        )
-    elif status == 'added':
-        return (
-            f'{base_indent}{INDENTATION[:-2]}{ADDED_MARKER}{key}: '
-            f'{format_value(value["value"], depth)}'
-        )
-    elif status == 'removed':
-        return (
-            f'{base_indent}{INDENTATION[:-2]}{REMOVED_MARKER}{key}: '
-            f'{format_value(value["value"], depth)}'
-        )
-    elif status == 'changed':
-        return format_changed(key, value, depth)
 
 
 def format_changed(key, value, depth):

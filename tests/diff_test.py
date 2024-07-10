@@ -7,65 +7,42 @@ def get_content(file_path):
     with open(file_path, 'r') as file:
         return file.read().strip()
 
-# Создание фикстуры для хранения имен файлов
 
-
-@pytest.fixture
-def data_files():
-    return {
-        'json1_flat': 'file1.json',
-        'json2_flat': 'file2.json',
-        'yml1_flat': 'file1.yml',
-        'yml2_flat': 'file2.yml',
-        'json1_rec': 'rec_struct1.json',
-        'json2_rec': 'rec_struct2.json',
-        'yml1_rec': 'rec_struct1.yml',
-        'yml2_rec': 'rec_struct2.yml',
-        # файл с результатом рекурсия
-        'result_stylish_rec': 'result_stylish.txt',
-        'result_plain_rec': 'result_plain.txt',
-        'result_json_rec': 'result_json.txt',
-        # файл с результатом плоских
-        'result_stylish_flat': 'result_stylish_flat.txt',
-        'result_plain_flat': 'result_plain_flat.txt',
-        'result_json_flat': 'result_json_flat.txt',
-    }
-
-
-# Тест для generate_diff
-
-
-@pytest.mark.parametrize("file1_key, file2_key, expected_key, format_name", [
-    ('json1_flat', 'json2_flat', 'result_stylish_flat', 'stylish'),
-    ('yml1_flat', 'yml2_flat', 'result_stylish_flat', 'stylish'),
-    ('json1_flat', 'yml2_flat', 'result_stylish_flat', 'stylish'),
-    ('json1_flat', 'json2_flat', 'result_plain_flat', 'plain'),
-    ('yml1_flat', 'yml2_flat', 'result_plain_flat', 'plain'),
-    ('json1_flat', 'yml2_flat', 'result_plain_flat', 'plain'),
-    ('json1_flat', 'json2_flat', 'result_json_flat', 'json'),
-    ('yml1_flat', 'yml2_flat', 'result_json_flat', 'json'),
-    ('json1_flat', 'yml2_flat', 'result_json_flat', 'json'),
-    # рекурсия
-    ('json1_rec', 'json2_rec', 'result_stylish_rec', 'stylish'),
-    ('yml1_rec', 'yml2_rec', 'result_stylish_rec', 'stylish'),
-    ('json1_rec', 'yml2_rec', 'result_stylish_rec', 'stylish'),
-    ('json1_rec', 'json2_rec', 'result_plain_rec', 'plain'),
-    ('yml1_rec', 'yml2_rec', 'result_plain_rec', 'plain'),
-    ('json1_rec', 'yml2_rec', 'result_plain_rec', 'plain'),
-    ('json1_rec', 'json2_rec', 'result_json_rec', 'json'),
-    ('yml1_rec', 'yml2_rec', 'result_json_rec', 'json'),
-    ('json1_rec', 'yml2_rec', 'result_json_rec', 'json'),
-])
-def test_generate_diff(file1_key, file2_key, expected_key, format_name,
-                       data_files):
+def get_fixture_path(file_name):
     # Получаем абсолютный путь к текущему файлу
     current_dir = os.path.abspath(__file__)
     # Получаем абсолютный путь к папке fixtures от текущего файла
     fixtures_dir = os.path.join(os.path.dirname(current_dir), 'fixtures')
+    return os.path.join(fixtures_dir, file_name)
 
-    file1_path = os.path.join(fixtures_dir, data_files[file1_key])
-    file2_path = os.path.join(fixtures_dir, data_files[file2_key])
-    expected_output_path = os.path.join(fixtures_dir, data_files[expected_key])
+# Тест для generate_diff
+
+
+@pytest.mark.parametrize("file1, file2, expected, format_name", [
+    ("file1.json", "file2.json", "result_stylish_flat.txt", "stylish"),
+    ("file1.yml", "file2.yml", "result_stylish_flat.txt", "stylish"),
+    ("file1.json", "file2.yml", "result_stylish_flat.txt", "stylish"),
+    ("file1.json", "file2.json", "result_plain_flat.txt", "plain"),
+    ("file1.yml", "file2.yml", "result_plain_flat.txt", "plain"),
+    ("file1.json", "file2.yml", "result_plain_flat.txt", "plain"),
+    ("file1.json", "file2.json", "result_json_flat.txt", "json"),
+    ("file1.yml", "file2.yml", "result_json_flat.txt", "json"),
+    ("file1.json", "file2.yml", "result_json_flat.txt", "json"),
+    # рекурсия
+    ("rec_struct1.json", "rec_struct2.json", "result_stylish.txt", "stylish"),
+    ("rec_struct1.yml", "rec_struct2.yml", "result_stylish.txt", "stylish"),
+    ("rec_struct1.json", "rec_struct2.yml", "result_stylish.txt", "stylish"),
+    ("rec_struct1.json", "rec_struct2.json", "result_plain.txt", "plain"),
+    ("rec_struct1.yml", "rec_struct2.yml", "result_plain.txt", "plain"),
+    ("rec_struct1.json", "rec_struct2.yml", "result_plain.txt", "plain"),
+    ("rec_struct1.json", "rec_struct2.json", "result_json.txt", "json"),
+    ("rec_struct1.yml", "rec_struct2.yml", "result_json.txt", "json"),
+    ("rec_struct1.json", "rec_struct2.yml", "result_json.txt", "json"),
+])
+def test_generate_diff(file1, file2, expected, format_name):
+    file1_path = get_fixture_path(file1)
+    file2_path = get_fixture_path(file2)
+    expected_output_path = get_fixture_path(expected)
 
     differences = generate_diff(file1_path, file2_path, format_name=format_name)
     expected_output = get_content(expected_output_path)
