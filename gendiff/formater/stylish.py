@@ -1,14 +1,18 @@
 INDENTATION = '    '   # Отступ для каждого уровня вложенности
 ADDED_MARKER = '+ '    # Маркер для добавленных значений
 REMOVED_MARKER = '- '  # Маркер для удаленных значений
+UNCHANGED = '  '       # Маркер для неизмененных значений
+CHANGED = '  '         # Маркер для неизмененных значений
+CHILDREN = '  '        # Маркер для детей
+
 
 # Словарь с маркерами для каждого статуса
 STATUS_MARKERS = {
     'added': ADDED_MARKER,
     'removed': REMOVED_MARKER,
-    'unchanged': '  ',
-    'children': '  ',
-    'changed': '  '
+    'unchanged': UNCHANGED,
+    'children': CHILDREN,
+    'changed': CHANGED
 }
 
 
