@@ -38,16 +38,8 @@ def make_lines(differences, depth=1):
             )
         elif status == 'changed':
             lines.append(format_changed(key, value, depth))
-        elif status == 'added':
-            lines.append(
-                f'{base_indent}{INDENTATION[:-2]}{ADDED_MARKER}{key}: '
-                f'{format_value(value["value"], depth)}'
-            )
-        elif status == 'removed':
-            lines.append(
-                f'{base_indent}{INDENTATION[:-2]}{REMOVED_MARKER}{key}: '
-                f'{format_value(value["value"], depth)}'
-            )
+        elif status in ['added', 'removed']:
+            lines.append(format_added_removed(key, value, depth))
 
     return lines
 
@@ -70,6 +62,17 @@ def format_changed(key, value, depth):
         f'{format_value(new_value, depth)}'
     )
     return '\n'.join(lines)
+
+
+def format_added_removed(key, value, depth):
+    # Эта функция форматирует строки для added и removed значений.
+    base_indent = INDENTATION * (depth - 1)
+    status = value['status']
+    marker = STATUS_MARKERS[status]
+    return (
+        f'{base_indent}{INDENTATION[:-2]}{marker}{key}: '
+        f'{format_value(value["value"], depth)}'
+    )
 
 
 def format_value(value, depth):
