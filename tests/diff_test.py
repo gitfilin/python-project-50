@@ -2,6 +2,12 @@ import os
 import pytest
 from gendiff.diff_generator import generate_diff
 
+# Получаем абсолютный путь к текущему файлу
+CURRENT_DIR = os.path.abspath(__file__)
+
+# Получаем абсолютный путь к папке fixtures от текущего файла
+FIXTURES_DIR = os.path.join(os.path.dirname(CURRENT_DIR), 'fixtures')
+
 
 def get_content(file_path):
     with open(file_path, 'r') as file:
@@ -9,11 +15,7 @@ def get_content(file_path):
 
 
 def get_fixture_path(file_name):
-    # Получаем абсолютный путь к текущему файлу
-    current_dir = os.path.abspath(__file__)
-    # Получаем абсолютный путь к папке fixtures от текущего файла
-    fixtures_dir = os.path.join(os.path.dirname(current_dir), 'fixtures')
-    return os.path.join(fixtures_dir, file_name)
+    return os.path.join(FIXTURES_DIR, file_name)
 
 # Тест для generate_diff
 

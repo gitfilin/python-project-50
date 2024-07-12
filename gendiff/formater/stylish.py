@@ -2,6 +2,15 @@ INDENTATION = '    '   # Отступ для каждого уровня вло�
 ADDED_MARKER = '+ '    # Маркер для добавленных значений
 REMOVED_MARKER = '- '  # Маркер для удаленных значений
 
+# Словарь с маркерами для каждого статуса
+STATUS_MARKERS = {
+    'added': ADDED_MARKER,
+    'removed': REMOVED_MARKER,
+    'unchanged': '  ',
+    'children': '  ',
+    'changed': '  '
+}
+
 
 def format(diff):
     # форматируем вывод
@@ -11,7 +20,6 @@ def format(diff):
 
 
 def make_lines(differences, depth=1):
-    # Эта функция создает отформатированные строки для каждой пары ключ-значение
     lines = []
     base_indent = INDENTATION * (depth - 1)
 
@@ -30,10 +38,14 @@ def make_lines(differences, depth=1):
             )
         elif status == 'changed':
             lines.append(format_changed(key, value, depth))
-        else:
-            marker = ADDED_MARKER if status == 'added' else REMOVED_MARKER
+        elif status == 'added':
             lines.append(
-                f'{base_indent}{INDENTATION[:-2]}{marker}{key}: '
+                f'{base_indent}{INDENTATION[:-2]}{ADDED_MARKER}{key}: '
+                f'{format_value(value["value"], depth)}'
+            )
+        elif status == 'removed':
+            lines.append(
+                f'{base_indent}{INDENTATION[:-2]}{REMOVED_MARKER}{key}: '
                 f'{format_value(value["value"], depth)}'
             )
 
@@ -47,25 +59,16 @@ def format_changed(key, value, depth):
     """
     base_indent = INDENTATION * (depth - 1)
     lines = []
-
     old_value = value["old"]
     new_value = value["new"]
-
-    if old_value is None and new_value is True:
-        lines.append(
-            f'{base_indent}{INDENTATION[:-2]}{ADDED_MARKER}{key}: '
-            f'{format_value(new_value, depth)}'
-        )
-    else:
-        lines.append(
-            f'{base_indent}{INDENTATION[:-2]}{REMOVED_MARKER}{key}: '
-            f'{format_value(old_value, depth)}'
-        )
-        lines.append(
-            f'{base_indent}{INDENTATION[:-2]}{ADDED_MARKER}{key}: '
-            f'{format_value(new_value, depth)}'
-        )
-
+    lines.append(
+        f'{base_indent}{INDENTATION[:-2]}{REMOVED_MARKER}{key}: '
+        f'{format_value(old_value, depth)}'
+    )
+    lines.append(
+        f'{base_indent}{INDENTATION[:-2]}{ADDED_MARKER}{key}: '
+        f'{format_value(new_value, depth)}'
+    )
     return '\n'.join(lines)
 
 
@@ -76,22 +79,18 @@ def format_value(value, depth):
     elif value is None:
         return 'null'
     elif isinstance(value, dict):
-        return format_dict(value, depth + 1)
+        # Форматируем словарь в виде строки
+        lines = []
+        base_indent = INDENTATION * depth
+        for k, v in value.items():
+            if isinstance(v, dict):
+                lines.append(f'{base_indent}{INDENTATION}{k}: '
+                             f'{format_value(v, depth + 1)}'
+                             )
+            else:
+                lines.append(f'{base_indent}{INDENTATION}{k}: '
+                             f'{format_value(v, depth + 1)}'
+                             )
+        return '{\n' + '\n'.join(lines) + '\n' + base_indent + '}'
     else:
         return str(value)
-
-
-def format_dict(value, depth):
-    # Эта функция форматирует словарь value в виде строки.
-    lines = []
-    base_indent = INDENTATION * (depth - 1)
-    for k, v in value.items():
-        if isinstance(v, dict):
-            lines.append(f'{base_indent}{INDENTATION}{k}: '
-                         f'{format_dict(v, depth + 1)}'
-                         )
-        else:
-            lines.append(f'{base_indent}{INDENTATION}{k}: '
-                         f'{format_value(v, depth + 1)}'
-                         )
-    return '{\n' + '\n'.join(lines) + '\n' + INDENTATION * (depth - 1) + '}'

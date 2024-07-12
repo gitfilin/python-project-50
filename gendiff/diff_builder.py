@@ -17,15 +17,14 @@ def building_diff(dict1, dict2):
             differences[key] = {'status': 'removed', 'value': value1}
             continue
 
-        if isinstance(value1, dict) and isinstance(value2, dict):
-            differences[key] = {'status': 'children',
-                                'diff': building_diff(value1, value2)}
-            continue
-
         if value1 == value2:
             differences[key] = {'status': 'unchanged', 'value': value1}
         else:
             differences[key] = {'status': 'changed',
                                 'old': value1, 'new': value2}
+
+        if isinstance(value1, dict) and isinstance(value2, dict):
+            differences[key] = {'status': 'children',
+                                'diff': building_diff(value1, value2)}
 
     return differences
